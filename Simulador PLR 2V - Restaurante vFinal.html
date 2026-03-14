@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="HandheldFriendly" content="true">
+<meta name="MobileOptimized" content="width">
+<meta name="theme-color" content="#1E4D2B">
+<meta name="format-detection" content="telephone=no,date=no,address=no,email=no">
+<title>Simulador PLR — 2V Restaurantes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════ */
+:root {
+  --cream:       #EDE8DE;
+  --cream-dark:  #E0D9CC;
+  --green:       #1E4D2B;
+  --green-mid:   #2D6A3F;
+  --green-light: #D6E8DA;
+  --green-soft:  #EBF3ED;
+  --accent:      #3A6B4A;
+  --accent-light:#D0E8D8;
+  --black:       #141414;
+  --gray:        #6B6B5E;
+  --gray-light:  #CCCABC;
+  --white:       #FFFFFF;
+  --red:         #C0392B;
+  --red-light:   #FDECEA;
+  --amber:       #A07000;
+  --amber-light: #FEF9EE;
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --radius-sm: 10px;
+  --radius:    16px;
+  --radius-lg: 24px;
+}
+
+/* ═══════════════════════════════════════
+   RESET
+═══════════════════════════════════════ */
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0; padding: 0;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+  height: 100%; overflow-x: hidden;
+}
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  min-height: 100vh;
+  color: var(--black);
+  -webkit-font-smoothing: antialiased;
+     -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+/* Prevent iOS zoom on input focus */
+input, select, textarea { font-size: 16px; }
+img { max-width: 100%; height: auto; border: 0; }
+button { font-family: inherit; cursor: pointer; }
+
+/* ═══════════════════════════════════════
+   BACKGROUND TEXTURE
+═══════════════════════════════════════ */
+body:before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    -webkit-radial-gradient(15% 20%, circle, rgba(30,77,43,0.06), transparent 40%),
+    -webkit-radial-gradient(85% 75%, rgba(30,77,43,0.04), transparent 40%);
+  background:
+    radial-gradient(circle at 15% 20%, rgba(30,77,43,0.06), transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(30,77,43,0.04), transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--gray-light); border-radius: 3px; -webkit-border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gray); }
+
+/* ═══════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════ */
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: 80px;
+  padding-bottom: calc(80px + constant(safe-area-inset-bottom));
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+}
+
+/* ═══════════════════════════════════════
+   HEADER
+═══════════════════════════════════════ */
+.header {
+  background: var(--green);
+  padding: 20px 24px 34px;
+  padding-top: calc(28px + constant(safe-area-inset-top));
+  padding-top: calc(28px + env(safe-area-inset-top));
+  padding-left: calc(24px + constant(safe-area-inset-left));
+  padding-left: calc(24px + env(safe-area-inset-left));
+  padding-right: calc(24px + constant(safe-area-inset-right));
+  padding-right: calc(24px + env(safe-area-inset-right));
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+}
+.header:after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 20px;
+  background: var(--cream);
+  border-radius: 20px 20px 0 0;
+  -webkit-border-radius: 20px 20px 0 0;
+     -moz-border-radius: 20px 20px 0 0;
+  z-index: 1;
+}
+
+.header-dots {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 16px;
+}
+.header-dots span {
+  width: 8px; height: 8px;
+  border-radius: 50%; -webkit-border-radius: 50%;
+  background: var(--cream); opacity: 0.5;
+  display: inline-block; margin-right: 5px;
+}
+.header-dots span:nth-child(2) { background: var(--green-light); opacity: 0.8; }
+.header-dots span:nth-child(3) { background: rgba(255,255,255,0.3); }
+
+.header-brand {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: flex-end;
+      -ms-flex-align: flex-end;
+          align-items: flex-end;
+  margin-bottom: 6px;
+}
+.brand-logo {
+  font-family: var(--font-display);
+  font-size: 42px; color: var(--white);
+  line-height: 1; letter-spacing: -1px;
+  margin-right: 12px;
+}
+.brand-logo em {
+  font-style: italic; color: var(--cream);
+  opacity: 0.75; font-size: 36px;
+}
+.brand-tag {
+  background: var(--green-mid); color: var(--cream);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px; -webkit-border-radius: 4px;
+  margin-bottom: 6px;
+}
+.header-title { font-family: var(--font-display); font-size: 22px; color: var(--white); line-height: 1.2; }
+.header-sub { color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 4px; }
+
+/* ═══════════════════════════════════════
+   PROGRESS
+═══════════════════════════════════════ */
+.progress-wrap { padding: 20px 24px 0; }
+.progress-bar {
+  height: 4px; background: var(--cream-dark);
+  border-radius: 2px; -webkit-border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--green);
+  border-radius: 2px; -webkit-border-radius: 2px;
+  width: 20%;
+  -webkit-transition: width 0.5s cubic-bezier(.4,0,.2,1);
+          transition: width 0.5s cubic-bezier(.4,0,.2,1);
+}
+.progress-label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  font-size: 11.5px; color: var(--gray);
+  margin-top: 6px; font-weight: 500;
+}
+
+/* ═══════════════════════════════════════
+   SCREENS
+═══════════════════════════════════════ */
+.screen { display: none; padding: 24px 24px 0; }
+.screen.active {
+  display: block;
+  -webkit-animation: slideUp 0.35s cubic-bezier(.4,0,.2,1);
+          animation: slideUp 0.35s cubic-bezier(.4,0,.2,1);
+}
+@-webkit-keyframes slideUp {
+  from { opacity: 0; -webkit-transform: translateY(18px); transform: translateY(18px); }
+  to   { opacity: 1; -webkit-transform: translateY(0);    transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════
+   QUESTION HEADERS
+═══════════════════════════════════════ */
+.q-step {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--green); margin-bottom: 8px;
+}
+.q-title {
+  font-family: var(--font-display);
+  font-size: 28px; line-height: 1.15;
+  color: var(--black); margin-bottom: 6px;
+}
+.q-sub {
+  font-size: 13.5px; color: var(--gray);
+  line-height: 1.5; margin-bottom: 22px;
+}
+
+/* ═══════════════════════════════════════
+   SALARY FIELD
+═══════════════════════════════════════ */
+.salary-field {
+  background: var(--white);
+  border: 2px solid var(--cream-dark);
+  border-radius: var(--radius); -webkit-border-radius: var(--radius); -moz-border-radius: var(--radius);
+  padding: 6px 18px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transition: border-color .2s, -webkit-box-shadow .2s;
+          transition: border-color .2s, box-shadow .2s;
+}
+.salary-field:focus-within {
+  border-color: var(--green);
+  -webkit-box-shadow: 0 0 0 4px rgba(30,77,43,0.1);
+          box-shadow: 0 0 0 4px rgba(30,77,43,0.1);
+}
+.salary-field.field-error {
+  border-color: var(--red) !important;
+  -webkit-box-shadow: 0 0 0 4px rgba(192,57,43,0.1) !important;
+          box-shadow: 0 0 0 4px rgba(192,57,43,0.1) !important;
+}
+.salary-prefix {
+  font-family: var(--font-display);
+  font-size: 22px; color: var(--green);
+  -ms-flex-negative: 0; flex-shrink: 0;
+  margin-right: 10px;
+}
+.salary-input {
+  -webkit-box-flex: 1; -ms-flex: 1; flex: 1;
+  min-width: 0; border: none; outline: none;
+  font-family: var(--font-display);
+  font-size: 32px; color: var(--black);
+  background: transparent;
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  width: 100%; padding: 10px 0;
+}
+.salary-input::-webkit-input-placeholder { color: var(--gray-light); }
+.salary-input::-moz-placeholder          { color: var(--gray-light); opacity: 1; }
+.salary-input:-ms-input-placeholder      { color: var(--gray-light); }
+.salary-input::placeholder               { color: var(--gray-light); }
+
+/* ═══════════════════════════════════════
+   ERROR MESSAGES
+═══════════════════════════════════════ */
+.err-msg {
+  display: none;
+  -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+  margin-top: 8px; padding: 7px 12px;
+  background: var(--red-light);
+  border-left: 3px solid var(--red);
+  border-radius: 0 6px 6px 0; -webkit-border-radius: 0 6px 6px 0;
+  font-size: 12px; font-weight: 600; color: var(--red);
+}
+.err-msg.show {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.err-msg:before {
+  content: '!'; font-size: 10px; font-weight: 800;
+  width: 16px; height: 16px; min-width: 16px;
+  background: var(--red); color: white;
+  border-radius: 50%; -webkit-border-radius: 50%;
+  display: -webkit-inline-box; display: -ms-inline-flexbox; display: inline-flex;
+  -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+  -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
+  -ms-flex-negative: 0; flex-shrink: 0; margin-right: 6px;
+}
+
+/* ═══════════════════════════════════════
+   LEVEL BUTTONS
+═══════════════════════════════════════ */
+.level-grid {
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+  -webkit-box-orient: vertical; -webkit-box-direction: normal;
+      -ms-flex-direction: column; flex-direction: column;
+}
+.level-grid > * + * { margin-top: 10px; }
+
+.level-btn {
+  background: var(--white);
+  border: 2px solid var(--cream-dark);
+  border-radius: var(--radius); -webkit-border-radius: var(--radius);
+  padding: 16px 18px; cursor: pointer;
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+  -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+  -webkit-box-pack: justify; -ms-flex-pack: justify; justify-content: space-between;
+  -webkit-transition: background-color .2s, border-color .2s;
+          transition: background-color .2s, border-color .2s;
+  -webkit-tap-highlight-color: transparent; -webkit-tap-highlight-color: rgba(0,0,0,0);
+  touch-action: manipulation; text-align: left; width: 100%;
+  -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+}
+.level-btn:hover, .level-btn:focus { border-color: var(--green-mid); background: var(--green-soft); outline: none; }
+.level-btn.selected { border-color: var(--green); background: var(--green); }
+.level-btn.no-plr { border-color: var(--gray-light); }
+.level-btn.no-plr.selected { border-color: var(--black); background: var(--black); }
+
+.level-left {
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+  -webkit-box-orient: vertical; -webkit-box-direction: normal;
+      -ms-flex-direction: column; flex-direction: column;
+}
+.level-left > * + * { margin-top: 2px; }
+.level-name {
+  font-family: var(--font-display); font-size: 18px; line-height: 1;
+  color: var(--black); -webkit-transition: color .2s; transition: color .2s;
+}
+.level-btn.selected .level-name { color: var(--white); }
+.level-condition {
+  font-size: 12px; color: var(--gray); font-weight: 500;
+  -webkit-transition: color .2s; transition: color .2s;
+}
+.level-btn.selected .level-condition     { color: rgba(255,255,255,0.75); }
+.level-btn.no-plr.selected .level-condition { color: rgba(255,255,255,0.6); }
+.level-pct {
+  font-family: var(--font-display); font-size: 28px;
+  color: var(--green); -ms-flex-negative: 0; flex-shrink: 0;
+  line-height: 1; -webkit-transition: color .2s; transition: color .2s;
+}
+.level-btn.selected .level-pct       { color: rgba(255,255,255,0.9); }
+.level-btn.no-plr .level-pct         { color: var(--gray); }
+.level-btn.no-plr.selected .level-pct { color: rgba(255,255,255,0.7); }
+
+/* ═══════════════════════════════════════
+   META BUTTONS
+═══════════════════════════════════════ */
+.meta-grid {
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+}
+.meta-grid > * { -webkit-box-flex: 1; -ms-flex: 1; flex: 1; }
+.meta-grid > * + * { margin-left: 10px; }
+
+.meta-btn {
+  background: var(--white);
+  border: 2px solid var(--cream-dark);
+  border-radius: var(--radius); -webkit-border-radius: var(--radius);
+  padding: 14px 6px; cursor: pointer;
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+  -webkit-box-orient: vertical; -webkit-box-direction: normal;
+      -ms-flex-direction: column; flex-direction: column;
+  -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+  -webkit-transition: background-color .2s, border-color .2s;
+          transition: background-color .2s, border-color .2s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent; -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+  width: 100%;
+}
+.meta-btn > * + * { margin-top: 4px; }
+.meta-btn:hover, .meta-btn:focus { border-color: var(--green-mid); background: var(--green-soft); outline: none; }
+.meta-btn.selected { border-color: var(--green); background: var(--green); }
+.meta-num {
+  font-family: var(--font-display); font-size: 26px;
+  color: var(--black); line-height: 1;
+  -webkit-transition: color .2s; transition: color .2s;
+}
+.meta-btn.selected .meta-num { color: var(--white); }
+.meta-lbl {
+  font-size: 10px; color: var(--gray); font-weight: 600;
+  -webkit-transition: color .2s; transition: color .2s;
+  text-align: center; line-height: 1.2;
+}
+.meta-btn.selected .meta-lbl { color: rgba(255,255,255,0.8); }
+
+/* ═══════════════════════════════════════
+   QA STAR BUTTONS — 3×2 grid
+═══════════════════════════════════════ */
+.star-grid {
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+  -ms-flex-wrap: wrap; flex-wrap: wrap;
+}
+/* Row 1 spacing */
+.star-grid .star-btn { margin-right: 12px; margin-bottom: 12px; }
+.star-grid .star-btn:nth-child(2n) { margin-right: 0; }
+
+.PLACEHOLDER_REMOVED {left: 0; }
+
+.star-btn {
+  -webkit-box-flex: 0; -ms-flex: 0 0 calc(50% - 6px); flex: 0 0 calc(50% - 6px);
+  width: calc(50% - 6px);
+  background: var(--white);
+  border: 2px solid var(--cream-dark);
+  border-radius: var(--radius); -webkit-border-radius: var(--radius);
+  padding: 16px 8px 14px; cursor: pointer;
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+  -webkit-box-orient: vertical; -webkit-box-direction: normal;
+      -ms-flex-direction: column; flex-direction: column;
+  -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+  -webkit-box-pack: center;   -ms-flex-pack: center;   justify-content: center;
+  min-height: 110px;
+  -webkit-transition: background-color .2s, border-color .2s;
+          transition: background-color .2s, border-color .2s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent; -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+}
+.star-btn > * + * { margin-top: 8px; }
+.star-btn:focus { outline: none; }
+
+.star-dots {
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+  -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
+}
+.star-dots > * + * { margin-left: 3px; }
+.star-dot {
+  font-size: 13px; line-height: 1;
+  color: var(--cream-dark); display: inline-block;
+  -webkit-transition: color .2s; transition: color .2s;
+}
+.star-dot.filled { color: currentColor; }
+
+.star-num {
+  font-family: var(--font-display); font-size: 26px;
+  color: var(--black); line-height: 1;
+  -webkit-transition: color .2s; transition: color .2s;
+}
+.star-effect {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  line-height: 1; text-align: center;
+  -webkit-transition: color .2s; transition: color .2s;
+}
+
+/* QA 0–1: zero */
+.star-btn.lose-all { border-color: rgba(192,57,43,0.35); color: var(--red); }
+.star-btn.lose-all .star-num, .star-btn.lose-all .star-effect { color: var(--red); }
+.star-btn.lose-all:hover, .star-btn.lose-all:focus { background: var(--red-light); }
+.star-btn.lose-all.selected { background: var(--red); border-color: var(--red); }
+.star-btn.lose-all.selected .star-num,
+.star-btn.lose-all.selected .star-effect { color: var(--white); }
+.star-btn.lose-all.selected .star-dot       { color: rgba(255,255,255,0.35); }
+.star-btn.lose-all.selected .star-dot.filled { color: var(--white); }
+
+/* QA 2: −10% */
+.star-btn.lose-10 { border-color: rgba(160,112,0,0.35); color: var(--amber); }
+.star-btn.lose-10 .star-num, .star-btn.lose-10 .star-effect { color: var(--amber); }
+.star-btn.lose-10:hover, .star-btn.lose-10:focus { background: var(--amber-light); }
+.star-btn.lose-10.selected { background: var(--amber); border-color: var(--amber); }
+.star-btn.lose-10.selected .star-num,
+.star-btn.lose-10.selected .star-effect { color: var(--white); }
+.star-btn.lose-10.selected .star-dot       { color: rgba(255,255,255,0.35); }
+.star-btn.lose-10.selected .star-dot.filled { color: var(--white); }
+
+/* QA 3–4: 100% */
+.star-btn.keep-all { border-color: rgba(30,77,43,0.25); color: var(--green); }
+.star-btn.keep-all .star-num, .star-btn.keep-all .star-effect { color: var(--green); }
+.star-btn.keep-all:hover, .star-btn.keep-all:focus { background: var(--green-soft); }
+.star-btn.keep-all.selected { background: var(--green); border-color: var(--green); }
+.star-btn.keep-all.selected .star-num,
+.star-btn.keep-all.selected .star-effect { color: var(--white); }
+.star-btn.keep-all.selected .star-dot       { color: rgba(255,255,255,0.35); }
+.star-btn.keep-all.selected .star-dot.filled { color: var(--white); }
+
+/* QA 5: +5% */
+.star-btn.gain-5 { border-color: rgba(58,107,74,0.45); color: var(--accent); }
+.star-btn.gain-5 .star-num, .star-btn.gain-5 .star-effect { color: var(--accent); }
+.star-btn.gain-5:hover, .star-btn.gain-5:focus { background: var(--accent-light); }
+.star-btn.gain-5.selected { background: var(--accent); border-color: var(--accent); }
+.star-btn.gain-5.selected .star-num,
+.star-btn.gain-5.selected .star-effect { color: var(--white); }
+.star-btn.gain-5.selected .star-dot       { color: rgba(255,255,255,0.35); }
+.star-btn.gain-5.selected .star-dot.filled { color: var(--white); }
+
+.star-btn.gain-10 { border-color: rgba(21,128,61,0.55); color: #166534; }
+.star-btn.gain-10 .star-num, .star-btn.gain-10 .star-effect { color: #166534; }
+.star-btn.gain-10:hover, .star-btn.gain-10:focus { background: #dcfce7; }
+.star-btn.gain-10.selected { background: #166534; border-color: #166534; }
+.star-btn.gain-10.selected .star-num,
+.star-btn.gain-10.selected .star-effect { color: var(--white); }
+.star-btn.gain-10.selected .star-dot       { color: rgba(255,255,255,0.35); }
+.star-btn.gain-10.selected .star-dot.filled { color: var(--white); }
+
+/* ═══════════════════════════════════════
+   YES/NO BUTTONS
+═══════════════════════════════════════ */
+.yn-grid {
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+}
+.yn-grid > * { -webkit-box-flex: 1; -ms-flex: 1; flex: 1; }
+.yn-grid > * + * { margin-left: 12px; }
+
+.yn-btn {
+  background: var(--white);
+  border: 2px solid var(--cream-dark);
+  border-radius: var(--radius); -webkit-border-radius: var(--radius);
+  padding: 22px 16px; cursor: pointer;
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+  -webkit-box-orient: vertical; -webkit-box-direction: normal;
+      -ms-flex-direction: column; flex-direction: column;
+  -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+  -webkit-transition: background-color .2s, border-color .2s;
+          transition: background-color .2s, border-color .2s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent; -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+  width: 100%;
+}
+.yn-btn > * + * { margin-top: 8px; }
+.yn-btn:focus { outline: none; }
+.yn-icon { font-size: 32px; line-height: 1; }
+.yn-label {
+  font-family: var(--font-display); font-size: 22px;
+  color: var(--black); -webkit-transition: color .2s; transition: color .2s;
+}
+.yn-sub {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--gray);
+  -webkit-transition: color .2s; transition: color .2s;
+}
+.yn-btn.yes-btn:hover, .yn-btn.yes-btn:focus { border-color: var(--red); background: var(--red-light); }
+.yn-btn.yes-btn.selected { border-color: var(--red); background: var(--red); }
+.yn-btn.yes-btn.selected .yn-label,
+.yn-btn.yes-btn.selected .yn-sub { color: var(--white); }
+.yn-btn.no-btn:hover, .yn-btn.no-btn:focus { border-color: var(--green); background: var(--green-soft); }
+.yn-btn.no-btn.selected { border-color: var(--green); background: var(--green); }
+.yn-btn.no-btn.selected .yn-label,
+.yn-btn.no-btn.selected .yn-sub { color: var(--white); }
+
+/* ═══════════════════════════════════════
+   ACTION BUTTONS
+═══════════════════════════════════════ */
+.btn-next {
+  display: block; width: 100%;
+  background: var(--green); color: var(--white);
+  border: none;
+  border-radius: var(--radius); -webkit-border-radius: var(--radius);
+  padding: 17px 28px; font-family: var(--font-display); font-size: 19px;
+  -webkit-transition: background-color .2s, -webkit-transform .1s, -webkit-box-shadow .2s;
+          transition: background-color .2s, transform .1s, box-shadow .2s;
+  -webkit-box-shadow: 0 4px 20px rgba(30,77,43,0.25);
+          box-shadow: 0 4px 20px rgba(30,77,43,0.25);
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  margin-top: 24px; text-align: center; letter-spacing: 0.2px;
+  -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+}
+.btn-next:hover { background: var(--green-mid); }
+.btn-next:active { -webkit-transform: scale(0.99); transform: scale(0.99); }
+.btn-next:focus  { outline: 2px solid var(--green-mid); outline-offset: 2px; }
+
+.btn-back {
+  display: -webkit-inline-box; display: -ms-inline-flexbox; display: inline-flex;
+  -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+  background: transparent; border: 1.5px solid var(--gray-light);
+  border-radius: 8px; -webkit-border-radius: 8px;
+  padding: 8px 16px; font-size: 13px; font-weight: 600; color: var(--gray);
+  margin-top: 12px; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  -webkit-transition: border-color .2s, color .2s; transition: border-color .2s, color .2s;
+}
+.btn-back:hover, .btn-back:focus { border-color: var(--green); color: var(--green); outline: none; }
+
+/* ═══════════════════════════════════════
+   INFO BOX
+═══════════════════════════════════════ */
+.info-box {
+  background: var(--green-soft); border: 1.5px solid var(--green-light);
+  border-radius: var(--radius-sm); -webkit-border-radius: var(--radius-sm);
+  padding: 12px 16px; font-size: 12.5px; color: var(--green);
+  line-height: 1.5; margin-top: 14px;
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+  -webkit-box-align: flex-start; -ms-flex-align: flex-start; align-items: flex-start;
+}
+.info-box > * + * { margin-left: 10px; }
+.info-icon { font-size: 15px; -ms-flex-negative: 0; flex-shrink: 0; margin-top: 1px; }
+
+/* ═══════════════════════════════════════
+   RESULT SCREEN
+═══════════════════════════════════════ */
+.result-hero {
+  background: var(--green);
+  border-radius: var(--radius-lg); -webkit-border-radius: var(--radius-lg);
+  padding: 32px 28px; color: var(--white);
+  position: relative; overflow: hidden; margin-bottom: 16px;
+}
+.result-hero:before {
+  content: ''; position: absolute; top: -40px; right: -40px;
+  width: 180px; height: 180px; border-radius: 50%; -webkit-border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.result-hero:after {
+  content: ''; position: absolute; bottom: -30px; left: 20px;
+  width: 120px; height: 120px; border-radius: 50%; -webkit-border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.result-zero .result-hero { background: var(--black); }
+.result-tag { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7; margin-bottom: 14px; }
+.result-name { font-size: 14px; margin-bottom: 20px; opacity: 0.85; position: relative; z-index: 1; line-height: 1.4; font-weight: 500; }
+.result-label { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.7; position: relative; z-index: 1; margin-bottom: 6px; }
+.result-value {
+  font-family: var(--font-display); font-size: 54px;
+  line-height: 1; position: relative; z-index: 1;
+  letter-spacing: -1px; word-break: break-all;
+}
+.result-value .curr { font-size: 26px; vertical-align: top; margin-top: 10px; margin-right: 3px; opacity: 0.85; }
+.result-pct-badge {
+  display: -webkit-inline-box; display: -ms-inline-flexbox; display: inline-flex;
+  -webkit-box-align: center; -ms-flex-align: center; align-items: center;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px; -webkit-border-radius: 20px;
+  padding: 5px 14px; font-size: 12px; font-weight: 600;
+  margin-top: 14px; position: relative; z-index: 1;
+}
+
+.detail-grid {
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+  -ms-flex-wrap: wrap; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.detail-card {
+  background: var(--white);
+  border-radius: var(--radius); -webkit-border-radius: var(--radius);
+  padding: 16px; border: 1.5px solid var(--cream-dark);
+  -webkit-box-flex: 1; -ms-flex: 1 1 calc(50% - 5px); flex: 1 1 calc(50% - 5px);
+  min-width: calc(50% - 5px); margin: 5px;
+}
+.detail-card.full {
+  -webkit-box-flex: 1; -ms-flex: 1 1 100%; flex: 1 1 100%;
+  min-width: 100%; margin: 5px;
+}
+.dc-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); margin-bottom: 6px; }
+.dc-value { font-family: var(--font-display); font-size: 20px; color: var(--black); line-height: 1; }
+.dc-value.green  { color: var(--green); }
+.dc-value.red    { color: var(--red); }
+.dc-value.accent { color: var(--accent); }
+
+.zero-msg {
+  background: var(--white);
+  border-radius: var(--radius); -webkit-border-radius: var(--radius);
+  border: 1.5px solid #FDD; padding: 20px; text-align: center; margin-bottom: 14px;
+}
+.zero-msg .zero-icon { font-size: 40px; margin-bottom: 10px; }
+.zero-msg h3 { font-family: var(--font-display); font-size: 20px; color: var(--red); margin-bottom: 6px; }
+.zero-msg p  { font-size: 13px; color: var(--gray); line-height: 1.5; }
+
+.disclaimer {
+  background: var(--cream-dark);
+  border-radius: var(--radius-sm); -webkit-border-radius: var(--radius-sm);
+  padding: 12px 16px; font-size: 12px; color: var(--gray); line-height: 1.5; margin-bottom: 14px;
+}
+.disclaimer strong { color: var(--black); }
+
+.btn-reset {
+  display: block; width: 100%;
+  background: var(--white); color: var(--green);
+  border: 2px solid var(--green);
+  border-radius: var(--radius); -webkit-border-radius: var(--radius);
+  padding: 16px 28px; font-family: var(--font-display); font-size: 18px;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  -webkit-transition: background-color .2s, color .2s; transition: background-color .2s, color .2s;
+  text-align: center;
+}
+.btn-reset:hover { background: var(--green); color: var(--white); }
+.btn-reset:focus { outline: 2px solid var(--green-mid); outline-offset: 2px; }
+
+/* ═══════════════════════════════════════
+   SHAKE ANIMATION
+═══════════════════════════════════════ */
+@-webkit-keyframes shake {
+  0%,100% { -webkit-transform: translateX(0); transform: translateX(0); }
+  20%      { -webkit-transform: translateX(-7px); transform: translateX(-7px); }
+  40%      { -webkit-transform: translateX(7px);  transform: translateX(7px); }
+  60%      { -webkit-transform: translateX(-4px); transform: translateX(-4px); }
+  80%      { -webkit-transform: translateX(4px);  transform: translateX(4px); }
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-7px); }
+  40%      { transform: translateX(7px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+.shake { -webkit-animation: shake 0.4s ease; animation: shake 0.4s ease; }
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer {
+  text-align: center; padding: 24px;
+  padding-bottom: calc(24px + constant(safe-area-inset-bottom));
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  font-size: 12px; color: var(--gray);
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — DESKTOP
+═══════════════════════════════════════ */
+@media screen and (min-width: 600px) {
+  body { padding: 30px 16px 0; background: #D8D2C4; }
+  .app { -webkit-box-shadow: 0 0 60px rgba(0,0,0,0.1); box-shadow: 0 0 60px rgba(0,0,0,0.1); border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+}
+@media screen and (min-width: 900px) { body { padding: 40px 0 0; } }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — LARGE DESKTOP (1200px+)
+═══════════════════════════════════════ */
+@media screen and (min-width: 1200px) {
+  .app { max-width: 600px; }
+  .q-title { font-size: 24px; }
+  .level-pct { font-size: 26px; }
+  .result-value { font-size: 64px; }
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — TABLET (768–1199px)
+═══════════════════════════════════════ */
+@media screen and (min-width: 768px) and (max-width: 1199px) {
+  .app { max-width: 580px; }
+  .q-title { font-size: 23px; }
+  .result-value { font-size: 56px; }
+  .star-btn { padding: 16px 10px; }
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — SMALL TABLET / LARGE PHONE (481–767px)
+═══════════════════════════════════════ */
+@media screen and (min-width: 481px) and (max-width: 767px) {
+  .app { max-width: 100%; }
+  .q-title { font-size: 21px; }
+  .result-value { font-size: 50px; }
+  .star-btn { padding: 14px 8px; }
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — MOBILE (max 480px)
+═══════════════════════════════════════ */
+@media screen and (max-width: 480px) {
+  .app { max-width: 100%; }
+  header { padding: 18px 18px 32px; }
+  .brand-logo { font-size: 34px; }
+  .brand-logo em { font-size: 28px; }
+  .header-title { font-size: 18px; }
+  .progress-wrap { padding: 14px 18px 0; }
+  .screen { padding: 18px 18px 0; }
+  .q-title { font-size: 20px; margin-bottom: 3px; }
+  .q-sub { font-size: 12.5px; margin-bottom: 16px; }
+  .result-value { font-size: 44px; }
+  .result-hero { padding: 24px 20px; }
+  .level-name { font-size: 15px; }
+  .level-pct { font-size: 20px; }
+  .star-btn { min-height: 100px; padding: 12px 6px; }
+  .star-num { font-size: 24px; }
+  .star-dot { font-size: 14px; }
+  .btn-next { font-size: 17px; padding: 14px 20px; margin-top: 14px; }
+  .detail-grid { gap: 8px; }
+  .dc-label { font-size: 10px; }
+  .dc-value { font-size: 16px; }
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — SMALL MOBILE (360px)
+═══════════════════════════════════════ */
+@media screen and (max-width: 360px) {
+  header { padding: 14px 16px 30px; }
+  .brand-logo { font-size: 28px; }
+  .brand-logo em { font-size: 24px; }
+  .header-title { font-size: 16px; }
+  .header-sub { font-size: 11px; }
+  .q-title { font-size: 18px; }
+  .q-sub { font-size: 12px; margin-bottom: 14px; }
+  .level-name { font-size: 14px; }
+  .level-condition { font-size: 11px; }
+  .level-pct { font-size: 18px; }
+  .btn-next { font-size: 16px; padding: 13px 16px; }
+  .result-value { font-size: 36px; }
+  .result-value .curr { font-size: 18px; }
+  .dc-value { font-size: 15px; }
+  .star-btn { padding: 10px 4px; min-height: 88px; }
+  .star-num { font-size: 20px; }
+  .star-dot { font-size: 12px; }
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — LANDSCAPE SMALL SCREENS
+═══════════════════════════════════════ */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  header { padding: 12px 20px 28px; }
+  .brand-logo { font-size: 26px; }
+  .header-title { font-size: 15px; }
+  .header-sub { display: none; }
+  .progress-wrap { padding: 8px 20px 0; }
+  .screen { padding: 12px 20px 0; }
+  .q-title { font-size: 18px; margin-bottom: 2px; }
+  .q-sub { font-size: 11.5px; margin-bottom: 10px; }
+  .level-btn { padding: 10px 14px; }
+  .level-pct { font-size: 18px; }
+  .btn-next { margin-top: 10px; padding: 12px 20px; font-size: 16px; }
+  .result-value { font-size: 36px; }
+  .star-btn { min-height: 80px; padding: 10px 6px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-dots">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="header-brand">
+      <div class="brand-logo">2V<em>↑↓</em></div>
+      <div class="brand-tag">Restaurantes</div>
+    </div>
+    <div class="header-title">Simulador de PLR</div>
+    <div class="header-sub">Calcule sua Participação nos Lucros e Resultados</div>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-label">
+      <span id="progress-step">Passo 1 de 4</span>
+      <span id="progress-pct">20%</span>
+    </div>
+  </div>
+
+  <!-- ══ PASSO 1 — SALÁRIO ══ -->
+  <div class="screen active" id="screen1">
+    <div class="q-step">Passo 1 de 4</div>
+    <div class="q-title">Qual é o seu salário?</div>
+    <div class="q-sub">Informe o valor do seu salário bruto mensal.</div>
+    <div class="salary-field" id="salary-field">
+      <span class="salary-prefix">R$</span>
+      <input class="salary-input" id="salary-input"
+        type="text" inputmode="numeric" pattern="[0-9.,]*"
+        placeholder="0,00" autocomplete="off" autocorrect="off"
+        autocapitalize="off" spellcheck="false">
+    </div>
+    <div class="err-msg" id="err-salary">Informe um salário válido</div>
+    <button class="btn-next" id="btn-step1" type="button">Continuar →</button>
+  </div>
+
+  <!-- ══ PASSO 2 — NÍVEL DO DO ══ -->
+  <div class="screen" id="screen2">
+    <div class="q-step">Passo 2 de 4</div>
+    <div class="q-title">Qual nível o DO atingiu?</div>
+    <div class="q-sub">Selecione o nível de Desempenho Operacional alcançado pela unidade neste mês.</div>
+    <div class="level-grid">
+      <button class="level-btn no-plr" data-level="0" type="button">
+        <div class="level-left">
+          <div class="level-name">Abaixo do gatilho</div>
+          <div class="level-condition">DO &lt; 8% do orçado</div>
+        </div>
+        <div class="level-pct">0%</div>
+      </button>
+      <button class="level-btn" data-level="1" type="button">
+        <div class="level-left">
+          <div class="level-name">Nível 1</div>
+          <div class="level-condition">DO +8% · Pessoal 20%</div>
+        </div>
+        <div class="level-pct">20%</div>
+      </button>
+      <button class="level-btn" data-level="2" type="button">
+        <div class="level-left">
+          <div class="level-name">Nível 2</div>
+          <div class="level-condition">DO +15% · Pessoal 30%</div>
+        </div>
+        <div class="level-pct">30%</div>
+      </button>
+      <button class="level-btn" data-level="3" type="button">
+        <div class="level-left">
+          <div class="level-name">Nível 3</div>
+          <div class="level-condition">DO +20% · Pessoal 40%</div>
+        </div>
+        <div class="level-pct">40%</div>
+      </button>
+      <button class="level-btn" data-level="4" type="button">
+        <div class="level-left">
+          <div class="level-name">Nível 4</div>
+          <div class="level-condition">DO +30% · Pessoal 50%</div>
+        </div>
+        <div class="level-pct">50%</div>
+      </button>
+      <button class="level-btn" data-level="5" type="button">
+        <div class="level-left">
+          <div class="level-name">Nível 5</div>
+          <div class="level-condition">DO +40% · Pessoal 60%</div>
+        </div>
+        <div class="level-pct">60%</div>
+      </button>
+    </div>
+    <div class="err-msg" id="err-level">Selecione o nível do DO</div>
+    <button class="btn-next" id="btn-step2" type="button">Continuar →</button>
+    <button class="btn-back" id="back-step2" type="button">← Voltar</button>
+  </div>
+
+  <!-- ══ PASSO 3 — QA ══ -->
+  <div class="screen" id="screen3">
+    <div class="q-step">Passo 3 de 4</div>
+    <div class="q-title">Qual a nota do QA?</div>
+    <div class="q-sub">A avaliação de qualidade pode reduzir, manter ou aumentar o seu PLR.</div>
+    <div class="star-grid">
+      <button class="star-btn lose-all" data-qa="0" type="button">
+        <div class="star-dots"><span class="star-dot">☆</span><span class="star-dot">☆</span><span class="star-dot">☆</span><span class="star-dot">☆</span><span class="star-dot">☆</span></div>
+        <div class="star-num">0</div><div class="star-effect">0%</div>
+      </button>
+      <button class="star-btn lose-all" data-qa="1" type="button">
+        <div class="star-dots"><span class="star-dot filled">★</span><span class="star-dot">☆</span><span class="star-dot">☆</span><span class="star-dot">☆</span><span class="star-dot">☆</span></div>
+        <div class="star-num">1</div><div class="star-effect">0%</div>
+      </button>
+      <button class="star-btn lose-10" data-qa="2" type="button">
+        <div class="star-dots"><span class="star-dot filled">★</span><span class="star-dot filled">★</span><span class="star-dot">☆</span><span class="star-dot">☆</span><span class="star-dot">☆</span></div>
+        <div class="star-num">2</div><div class="star-effect">−10%</div>
+      </button>
+      <button class="star-btn keep-all" data-qa="3" type="button">
+        <div class="star-dots"><span class="star-dot filled">★</span><span class="star-dot filled">★</span><span class="star-dot filled">★</span><span class="star-dot">☆</span><span class="star-dot">☆</span></div>
+        <div class="star-num">3</div><div class="star-effect">100%</div>
+      </button>
+      <button class="star-btn keep-all" data-qa="4" type="button">
+        <div class="star-dots"><span class="star-dot filled">★</span><span class="star-dot filled">★</span><span class="star-dot filled">★</span><span class="star-dot filled">★</span><span class="star-dot">☆</span></div>
+        <div class="star-num">4</div><div class="star-effect">100%</div>
+      </button>
+      <button class="star-btn gain-5" data-qa="5" type="button">
+        <div class="star-dots"><span class="star-dot filled">★</span><span class="star-dot filled">★</span><span class="star-dot filled">★</span><span class="star-dot filled">★</span><span class="star-dot filled">★</span></div>
+        <div class="star-num">5</div><div class="star-effect">+5%</div>
+      </button>
+    </div>
+    <div class="err-msg" id="err-qa">Selecione a nota do QA</div>
+    <button class="btn-next" id="btn-step3" type="button">Continuar →</button>
+    <button class="btn-back" id="back-step3" type="button">← Voltar</button>
+  </div>
+
+  <!-- ══ PASSO 4 — FALTA ══ -->
+  <div class="screen" id="screen4">
+    <div class="q-step">Passo 4 de 4</div>
+    <div class="q-title">Falta injustificada?</div>
+    <div class="q-sub">Qualquer falta injustificada no mês elimina automaticamente o direito ao PLR.</div>
+    <div class="yn-grid">
+      <button class="yn-btn yes-btn" data-falta="sim" type="button">
+        <div class="yn-icon">😔</div>
+        <div class="yn-label">Sim</div>
+        <div class="yn-sub">tive falta</div>
+      </button>
+      <button class="yn-btn no-btn" data-falta="nao" type="button">
+        <div class="yn-icon">✅</div>
+        <div class="yn-label">Não</div>
+        <div class="yn-sub">sem faltas</div>
+      </button>
+    </div>
+    <div class="err-msg" id="err-falta">Selecione uma opção</div>
+    <button class="btn-next" id="btn-calcular" type="button">Calcular meu PLR →</button>
+    <button class="btn-back" id="back-step4" type="button">← Voltar</button>
+  </div>
+
+  <!-- ══ RESULTADO ══ -->
+  <div class="screen" id="screen-result">
+    <div id="result-content"></div>
+    <div class="disclaimer">
+      <strong>⚠ Estimativa:</strong> Este simulador é uma ferramenta de apoio. Os valores reais do PLR são apurados mensalmente pelo RH conforme os resultados oficiais da operação.
+    </div>
+    <button class="btn-reset" id="btn-reset" type="button">↩ Fazer nova simulação</button>
+  </div>
+
+</div>
+
+<footer>Simulador PLR 2026 · 2V Restaurantes · Uso interno</footer>
+<script>
+/* ═══════════════════════════════════════
+   POLYFILLS
+═══════════════════════════════════════ */
+if (typeof NodeList !== 'undefined' && NodeList.prototype && !NodeList.prototype.forEach) {
+  NodeList.prototype.forEach = Array.prototype.forEach;
+}
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function(item) {
+    for (var i = 0; i < this.length; i++) { if (this[i] === item) return i; }
+    return -1;
+  };
+}
+if (!String.prototype.includes) {
+  String.prototype.includes = function(s) { return this.indexOf(s) !== -1; };
+}
+
+/* ═══════════════════════════════════════
+   SCROLL SUAVE
+═══════════════════════════════════════ */
+function scrollTop() {
+  var start = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  if (!start) return;
+  var t0 = null, dur = 350;
+  function step(ts) {
+    if (!t0) t0 = ts;
+    var p = Math.min((ts - t0) / dur, 1);
+    var e = p < 0.5 ? 2*p*p : -1 + (4 - 2*p)*p;
+    window.scrollTo(0, start * (1 - e));
+    if (p < 1) {
+      if (window.requestAnimationFrame) window.requestAnimationFrame(step);
+      else setTimeout(function(){ step(Date.now()); }, 16);
+    }
+  }
+  if (window.requestAnimationFrame) window.requestAnimationFrame(step);
+  else { try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(ex) { window.scrollTo(0, 0); } }
+}
+
+/* ═══════════════════════════════════════
+   UTILITÁRIOS
+═══════════════════════════════════════ */
+function $id(id)  { return document.getElementById(id); }
+function $all(sel) {
+  var nl = document.querySelectorAll(sel), a = [];
+  for (var i = 0; i < nl.length; i++) a.push(nl[i]);
+  return a;
+}
+function on(el, ev, fn) {
+  if (!el) return;
+  if (el.addEventListener) el.addEventListener(ev, fn, false);
+  else if (el.attachEvent) el.attachEvent('on' + ev, fn);
+}
+function cl(el) {
+  return {
+    add: function(c) {
+      if (!el) return;
+      if (el.classList) { el.classList.add(c); }
+      else if (el.className.indexOf(c) === -1) { el.className = (el.className + ' ' + c).replace(/^\s+/, ''); }
+    },
+    rem: function(c) {
+      if (!el) return;
+      if (el.classList) { el.classList.remove(c); }
+      else { el.className = el.className.replace(new RegExp('(^|\\s)' + c + '(\\s|$)', 'g'), ' ').replace(/^\s+|\s+$/g, ''); }
+    },
+    has: function(c) {
+      if (!el) return false;
+      if (el.classList) return el.classList.contains(c);
+      return el.className.indexOf(c) !== -1;
+    }
+  };
+}
+
+/* ═══════════════════════════════════════
+   STATE — sem metas
+═══════════════════════════════════════ */
+var state = { salary: 0, level: null, qa: null, falta: null };
+
+/* PLR = Salário × DO% × QA (sem multiplicador de metas) */
+var DO_PCT  = { 0: 0, 1: 0.20, 2: 0.30, 3: 0.40, 4: 0.50, 5: 0.60 };
+// QA_BONUS: pontos percentuais ADICIONADOS ao target DO (null = zera PLR)
+var QA_BONUS = { 0: null, 1: null, 2: -0.10, 3: 0, 4: 0, 5: 0.05 };
+
+var currentStep = 1, TOTAL_STEPS = 4;
+
+/* ═══════════════════════════════════════
+   NAVEGAÇÃO
+═══════════════════════════════════════ */
+function goStep(n) {
+  if (n > currentStep && !validateStep(currentStep)) return;
+  cl($id('screen' + currentStep)).rem('active');
+  currentStep = n;
+  var toId = n > TOTAL_STEPS ? 'screen-result' : 'screen' + n;
+  cl($id(toId)).add('active');
+  updateProgress(n);
+  scrollTop();
+}
+function updateProgress(step) {
+  var pct = Math.round((step / TOTAL_STEPS) * 100);
+  var fill = $id('progress-fill'), s = $id('progress-step'), p = $id('progress-pct');
+  if (fill)  fill.style.width  = pct + '%';
+  if (s) s.textContent = step <= TOTAL_STEPS ? 'Passo ' + step + ' de ' + TOTAL_STEPS : 'Resultado';
+  if (p) p.textContent = pct + '%';
+}
+
+/* ═══════════════════════════════════════
+   VALIDAÇÃO
+═══════════════════════════════════════ */
+function validateStep(step) {
+  if (step === 1) {
+    var val = parseSalary($id('salary-input') ? $id('salary-input').value : '');
+    if (!val || val <= 0) { showErr('salary-field', 'err-salary', true); return false; }
+    state.salary = val; showErr('salary-field', 'err-salary', false); return true;
+  }
+  if (step === 2) { if (state.level === null) { showMsg('err-level', true);  return false; } showMsg('err-level', false);  return true; }
+  if (step === 3) { if (state.qa    === null) { showMsg('err-qa',    true);  return false; } showMsg('err-qa',    false);  return true; }
+  if (step === 4) { if (state.falta === null) { showMsg('err-falta', true);  return false; } showMsg('err-falta', false);  return true; }
+  return true;
+}
+function showErr(fId, eId, show) {
+  var f = $id(fId), e = $id(eId);
+  if (show) {
+    if (f) { cl(f).add('field-error'); cl(f).add('shake'); setTimeout(function(){ cl(f).rem('shake'); }, 450); }
+    if (e) cl(e).add('show');
+  } else {
+    if (f) { cl(f).rem('field-error'); cl(f).rem('shake'); }
+    if (e) cl(e).rem('show');
+  }
+}
+function showMsg(eId, show) {
+  var e = $id(eId); if (!e) return;
+  if (show) { cl(e).add('show'); cl(e).add('shake'); setTimeout(function(){ cl(e).rem('shake'); }, 450); }
+  else { cl(e).rem('show'); cl(e).rem('shake'); }
+}
+
+/* ═══════════════════════════════════════
+   SELETORES
+═══════════════════════════════════════ */
+function selectLevel(btn) {
+  var bs = $all('.level-btn');
+  for (var i = 0; i < bs.length; i++) cl(bs[i]).rem('selected');
+  cl(btn).add('selected');
+  state.level = parseInt(btn.getAttribute('data-level'), 10);
+  showMsg('err-level', false);
+}
+function selectQA(btn) {
+  var bs = $all('.star-btn');
+  for (var i = 0; i < bs.length; i++) cl(bs[i]).rem('selected');
+  cl(btn).add('selected');
+  state.qa = parseInt(btn.getAttribute('data-qa'), 10);
+  showMsg('err-qa', false);
+}
+function selectFalta(btn) {
+  var bs = $all('.yn-btn');
+  for (var i = 0; i < bs.length; i++) cl(bs[i]).rem('selected');
+  cl(btn).add('selected');
+  state.falta = btn.getAttribute('data-falta');
+  showMsg('err-falta', false);
+}
+
+/* ═══════════════════════════════════════
+   FORMATAÇÃO DE SALÁRIO
+═══════════════════════════════════════ */
+function parseSalary(val) {
+  if (!val) return 0;
+  return parseFloat(val.replace(/\./g, '').replace(',', '.').replace(/[^\d.]/g, '')) || 0;
+}
+function fmtInput(inp) {
+  var raw = inp.value.replace(/[^\d,]/g, '');
+  var pts = raw.split(',');
+  if (pts.length > 2) raw = pts[0] + ',' + pts.slice(1).join('');
+  if (pts.length === 2 && pts[1].length > 2) raw = pts[0] + ',' + pts[1].slice(0, 2);
+  var intPart = raw.split(',')[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  var decPart = raw.indexOf(',') !== -1 ? ',' + raw.split(',')[1] : '';
+  inp.value = intPart + decPart;
+}
+function fmtBlur(inp) {
+  var v = parseSalary(inp.value);
+  if (!v) { inp.value = ''; return; }
+  try { inp.value = v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  catch(e) { inp.value = v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+}
+
+/* ═══════════════════════════════════════
+   CÁLCULO — PLR = Salário × DO% × QA
+═══════════════════════════════════════ */
+function calcular() {
+  if (!validateStep(4)) return;
+  var s = state, plr = 0, reasons = [], isZero = false;
+  if (s.falta === 'sim')         { reasons.push('falta'); }
+  if (s.level === 0)             { reasons.push('do'); }
+  if (QA_BONUS[s.qa] === null)   { reasons.push('qa'); }
+  if (reasons.length > 0) {
+    isZero = true;
+  } else {
+    var doTgt    = DO_PCT[s.level];
+    var qaBonus  = QA_BONUS[s.qa];
+    var finalTgt = Math.max(0, doTgt + qaBonus);
+    plr = s.salary * finalTgt;
+  }
+  renderResult(plr, isZero, reasons);
+  cl($id('screen4')).rem('active');
+  cl($id('screen-result')).add('active');
+  var fill = $id('progress-fill'), st = $id('progress-step'), pt = $id('progress-pct');
+  if (fill) fill.style.width = '100%';
+  if (st)   st.textContent   = 'Resultado';
+  if (pt)   pt.textContent   = '100%';
+  scrollTop();
+}
+
+/* ═══════════════════════════════════════
+   RENDER RESULTADO
+═══════════════════════════════════════ */
+function fmt(n) {
+  try { return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  catch(e) { return n.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+}
+function renderResult(plr, isZero, reasons) {
+  var s = state, cont = $id('result-content'); if (!cont) return;
+  if (typeof reasons === 'string') reasons = reasons ? [reasons] : [];
+  var doTgt    = s.level > 0 ? DO_PCT[s.level] : 0;
+  var qaBonus  = (QA_BONUS[s.qa] !== undefined && QA_BONUS[s.qa] !== null) ? QA_BONUS[s.qa] : 0;
+  var finalTgt = Math.max(0, doTgt + qaBonus);
+  var doPct    = (doTgt * 100).toFixed(0);
+  var tpct     = (finalTgt * 100).toFixed(0);
+  var qLbl     = QA_BONUS[s.qa] === null ? '0% (PLR zerado)'
+               : qaBonus === -0.10 ? '−10%'
+               : qaBonus === 0.05  ? '+5%'
+               : 'Sem acréscimo';
+  var lvl = s.level === 0 ? 'Abaixo do gatilho' : 'Nível ' + s.level;
+
+  var msgMap = {
+    falta: '🚫 Você possui <strong>falta injustificada</strong> neste mês.',
+    do:    '📉 O <strong>DO ficou abaixo do gatilho</strong> mínimo (8%).',
+    qa:    '⭐ A <strong>nota QA de 0 ou 1 estrela</strong> zera o PLR.'
+  };
+  var reasonItems = reasons.map(function(r) { return '<li>' + (msgMap[r] || r) + '</li>'; }).join('');
+
+  var bonusLabel = qaBonus === 0.05 ? ' + bônus QA +5%' : qaBonus === -0.10 ? ' − 10% QA' : '';
+  var badge = isZero
+    ? '<div class="result-pct-badge">PLR zerado — ' + reasons.length + (reasons.length > 1 ? ' motivos' : ' motivo') + '</div>'
+    : '<div class="result-pct-badge">≈ ' + tpct + '% do salário</div>';
+
+  var zeroBlock = isZero
+    ? '<div class="zero-msg"><div class="zero-icon">🚫</div><h3>PLR não gerado</h3><ul style="list-style:none;padding:0;margin:0 0 6px;display:flex;flex-direction:column;gap:8px;">' + reasonItems + '</ul><p style="margin-top:8px;">Converse com seu gestor para mais detalhes.</p></div>'
+    : '';
+
+  var detail = '';
+  if (!isZero) {
+    var qcc = qaBonus > 0 ? ' accent' : qaBonus < 0 ? ' red' : '';
+    detail =
+      '<div class="detail-grid">' +
+        '<div class="detail-card"><div class="dc-label">Nível do DO</div><div class="dc-value green">' + lvl + '</div></div>' +
+        '<div class="detail-card"><div class="dc-label">Target DO</div><div class="dc-value green">' + doPct + '%</div></div>' +
+        '<div class="detail-card"><div class="dc-label">Ajuste QA</div><div class="dc-value' + qcc + '">' + qLbl + '</div></div>' +
+        '<div class="detail-card"><div class="dc-label">Falta injustificada</div><div class="dc-value">Não ✅</div></div>' +
+        '<div class="detail-card full"><div class="dc-label">Cálculo</div>' +
+          '<div class="dc-value" style="font-size:14px;line-height:1.5;">R$ ' + fmt(s.salary) + ' × ' + (qaBonus !== 0 ? '(' + doPct + '%' + (qaBonus > 0 ? ' + ' : ' − ') + Math.abs(qaBonus * 100).toFixed(0) + '%) = R$ ' + fmt(s.salary) + ' × ' + tpct + '% = ' : tpct + '% = ') + '<strong style="color:#1E4D2B;">R$ ' + fmt(plr) + '</strong></div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  cont.innerHTML =
+    '<div class="result-hero' + (isZero ? ' result-zero' : '') + '">' +
+      '<div class="result-tag">Simulação PLR · Restaurantes 2V</div>' +
+      '<div class="result-name">Salário: R$ ' + fmt(s.salary) + ' · ' + lvl + ' · QA ' + s.qa + '★</div>' +
+      '<div class="result-label">Estimativa de PLR do Mês</div>' +
+      '<div class="result-value"><span class="curr">R$</span>' + fmt(plr) + '</div>' +
+      badge +
+    '</div>' + zeroBlock + detail;
+}
+
+/* ═══════════════════════════════════════
+   RESET
+═══════════════════════════════════════ */
+function resetar() {
+  state = { salary: 0, level: null, qa: null, falta: null };
+  cl($id('screen-result')).rem('active');
+  var si = $id('salary-input'); if (si) si.value = '';
+  var bs = $all('.level-btn, .star-btn, .yn-btn');
+  for (var i = 0; i < bs.length; i++) cl(bs[i]).rem('selected');
+  var es = $all('.err-msg');
+  for (var j = 0; j < es.length; j++) cl(es[j]).rem('show');
+  cl($id('salary-field')).rem('field-error');
+  var rc = $id('result-content'); if (rc) rc.innerHTML = '';
+  currentStep = 1;
+  cl($id('screen1')).add('active');
+  updateProgress(1);
+  scrollTop();
+}
+
+/* ═══════════════════════════════════════
+   BIND DE EVENTOS
+═══════════════════════════════════════ */
+(function init() {
+  var si = $id('salary-input');
+  if (si) {
+    on(si, 'input',   function() { fmtInput(this); showErr('salary-field', 'err-salary', false); });
+    on(si, 'blur',    function() { fmtBlur(this); });
+    on(si, 'keydown', function(e) {
+      var k = e.key || e.keyCode;
+      if (k === 'Enter' || k === 13) { e.preventDefault ? e.preventDefault() : (e.returnValue = false); goStep(2); }
+    });
+  }
+  on($id('btn-step1'),    'click', function() { goStep(2); });
+  on($id('btn-step2'),    'click', function() { goStep(3); });
+  on($id('btn-step3'),    'click', function() { goStep(4); });
+  on($id('btn-calcular'), 'click', function() { calcular(); });
+  on($id('back-step2'),   'click', function() { goStep(1); });
+  on($id('back-step3'),   'click', function() { goStep(2); });
+  on($id('back-step4'),   'click', function() { goStep(3); });
+  on($id('btn-reset'),    'click', function() { resetar(); });
+
+  var lbs = $all('.level-btn');
+  for (var i = 0; i < lbs.length; i++) {
+    (function(b) { on(b, 'click', function() { selectLevel(b); }); on(b, 'touchstart', function() {}, false); })(lbs[i]);
+  }
+  var sbs = $all('.star-btn');
+  for (var k = 0; k < sbs.length; k++) {
+    (function(b) { on(b, 'click', function() { selectQA(b); }); on(b, 'touchstart', function() {}, false); })(sbs[k]);
+  }
+  var ybs = $all('.yn-btn');
+  for (var m = 0; m < ybs.length; m++) {
+    (function(b) { on(b, 'click', function() { selectFalta(b); }); on(b, 'touchstart', function() {}, false); })(ybs[m]);
+  }
+  var all = $all('.level-btn, .star-btn, .yn-btn');
+  for (var n = 0; n < all.length; n++) {
+    on(all[n], 'keydown', function(e) {
+      var k = e.key || e.keyCode;
+      if (k === ' ' || k === 'Spacebar' || k === 32 || k === 'Enter' || k === 13) {
+        e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+        this.click();
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
